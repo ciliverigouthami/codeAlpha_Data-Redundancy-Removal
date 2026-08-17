@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Data Redundancy Removal System</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 60%;
+            margin: 80px auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+        }
+
+        p {
+            color: #555;
+            font-size: 18px;
+        }
+
+        input[type="file"] {
+            margin: 25px 0;
+            padding: 10px;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Data Redundancy Removal System</h1>
+
+        <p>
+            Upload your CSV file to detect and remove duplicate records.
+        </p>
+
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+
+            <input type="file" name="file" accept=".csv" required>
+
+            <br>
+
+            <button type="submit">
+                Remove Duplicates
+            </button>
+
+        </form>
+
+    </div>
+
+</body>
+</html>
