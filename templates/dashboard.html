@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Data Redundancy Dashboard</title>
+
+
+    <style>
+
+        /* ==============================
+           PAGE
+        ============================== */
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            background-color: #f2f5f9;
+
+            margin: 0;
+
+            padding: 30px;
+
+        }
+
+
+        /* ==============================
+           MAIN CONTAINER
+        ============================== */
+
+        .container {
+
+            max-width: 1100px;
+
+            margin: auto;
+
+            background-color: white;
+
+            padding: 30px;
+
+            border-radius: 12px;
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+        }
+
+
+        /* ==============================
+           TITLE
+        ============================== */
+
+        h1 {
+
+            text-align: center;
+
+            color: #243b53;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        h2 {
+
+            color: #243b53;
+
+            margin-top: 35px;
+
+        }
+
+
+        /* ==============================
+           STATISTICS
+        ============================== */
+
+        .statistics {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin: 30px 0;
+
+        }
+
+
+        .card {
+
+            flex: 1;
+
+            padding: 20px;
+
+            text-align: center;
+
+            border-radius: 10px;
+
+            background-color: #eef5ff;
+
+            border: 1px solid #d5e6ff;
+
+        }
+
+
+        .card h2 {
+
+            margin: 0;
+
+            font-size: 32px;
+
+            color: #2196f3;
+
+        }
+
+
+        .card p {
+
+            font-weight: bold;
+
+            color: #555;
+
+            margin-bottom: 0;
+
+        }
+
+
+        /* ==============================
+           HISTORY TABLE
+        ============================== */
+
+        .table-container {
+
+            overflow-x: auto;
+
+            margin-top: 20px;
+
+        }
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 800px;
+
+        }
+
+
+        th {
+
+            padding: 14px;
+
+            background-color: #2196f3;
+
+            color: white;
+
+            text-align: center;
+
+        }
+
+
+        td {
+
+            padding: 12px;
+
+            border: 1px solid #ddd;
+
+            text-align: center;
+
+        }
+
+
+        tr:nth-child(even) {
+
+            background-color: #f8f9fa;
+
+        }
+
+
+        /* ==============================
+           CLASSIFICATION LABELS
+        ============================== */
+
+        .unique {
+
+            background-color: #d4edda;
+
+            color: #155724;
+
+            font-weight: bold;
+
+            padding: 6px 10px;
+
+            border-radius: 5px;
+
+        }
+
+
+        .redundant {
+
+            background-color: #f8d7da;
+
+            color: #721c24;
+
+            font-weight: bold;
+
+            padding: 6px 10px;
+
+            border-radius: 5px;
+
+        }
+
+
+        .false-positive {
+
+            background-color: #fff3cd;
+
+            color: #856404;
+
+            font-weight: bold;
+
+            padding: 6px 10px;
+
+            border-radius: 5px;
+
+        }
+
+
+        /* ==============================
+           STORED RECORDS
+        ============================== */
+
+        .stored-table {
+
+            margin-top: 20px;
+
+        }
+
+
+        /* ==============================
+           BACK BUTTON
+        ============================== */
+
+        .back {
+
+            display: block;
+
+            text-align: center;
+
+            margin-top: 30px;
+
+            color: #2196f3;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+        }
+
+
+        .back:hover {
+
+            text-decoration: underline;
+
+        }
+
+
+        /* ==============================
+           EMPTY MESSAGE
+        ============================== */
+
+        .empty {
+
+            text-align: center;
+
+            padding: 20px;
+
+            color: #777;
+
+        }
+
+
+        /* ==============================
+           MOBILE
+        ============================== */
+
+        @media (max-width: 700px) {
+
+            .statistics {
+
+                flex-direction: column;
+
+            }
+
+            body {
+
+                padding: 10px;
+
+            }
+
+            .container {
+
+                padding: 20px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- =========================================
+         TITLE
+    ========================================== -->
+
+    <h1>
+        Data Redundancy Dashboard
+    </h1>
+
+
+    <p style="text-align:center; color:#666;">
+        Monitor data classification and redundancy detection.
+    </p>
+
+
+    <!-- =========================================
+         STATISTICS
+    ========================================== -->
+
+    <div class="statistics">
+
+
+        <!-- TOTAL -->
+
+        <div class="card">
+
+            <h2>
+                {{ classification_statistics.total_checked }}
+            </h2>
+
+            <p>
+                Total Checked
+            </p>
+
+        </div>
+
+
+        <!-- UNIQUE -->
+
+        <div class="card">
+
+            <h2>
+                {{ classification_statistics.unique }}
+            </h2>
+
+            <p>
+                Unique
+            </p>
+
+        </div>
+
+
+        <!-- REDUNDANT -->
+
+        <div class="card">
+
+            <h2>
+                {{ classification_statistics.redundant }}
+            </h2>
+
+            <p>
+                Redundant
+            </p>
+
+        </div>
+
+
+        <!-- FALSE POSITIVE -->
+
+        <div class="card">
+
+            <h2>
+                {{ classification_statistics.false_positive }}
+            </h2>
+
+            <p>
+                False Positive
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =========================================
+         CLASSIFICATION HISTORY
+    ========================================== -->
+
+    <h2>
+        Classification History
+    </h2>
+
+
+    {% if history %}
+
+
+    <div class="table-container">
+
+
+        <table>
+
+
+            <tr>
+
+                <th>
+                    ID
+                </th>
+
+                <th>
+                    Name
+                </th>
+
+                <th>
+                    Age
+                </th>
+
+                <th>
+                    City
+                </th>
+
+                <th>
+                    Course
+                </th>
+
+                <th>
+                    Classification
+                </th>
+
+            </tr>
+
+
+            {% for item in history %}
+
+
+            <tr>
+
+
+                <td>
+                    {{ item[0] }}
+                </td>
+
+
+                <td>
+                    {{ item[1] }}
+                </td>
+
+
+                <td>
+                    {{ item[2] }}
+                </td>
+
+
+                <td>
+                    {{ item[3] }}
+                </td>
+
+
+                <td>
+                    {{ item[4] }}
+                </td>
+
+
+                <td>
+
+
+                    {% if item[5] == "UNIQUE" %}
+
+                        <span class="unique">
+                            🟢 UNIQUE
+                        </span>
+
+
+                    {% elif item[5] == "REDUNDANT" %}
+
+                        <span class="redundant">
+                            🔴 REDUNDANT
+                        </span>
+
+
+                    {% elif item[5] == "FALSE_POSITIVE" %}
+
+                        <span class="false-positive">
+                            🟡 FALSE POSITIVE
+                        </span>
+
+
+                    {% endif %}
+
+
+                </td>
+
+
+            </tr>
+
+
+            {% endfor %}
+
+
+        </table>
+
+
+    </div>
+
+
+    {% else %}
+
+
+        <div class="empty">
+
+            No classification history available yet.
+
+        </div>
+
+
+    {% endif %}
+
+
+    <!-- =========================================
+         STORED UNIQUE RECORDS
+    ========================================== -->
+
+    <h2>
+        Stored Unique Records
+    </h2>
+
+
+    {% if records %}
+
+
+    <div class="table-container stored-table">
+
+
+        <table>
+
+
+            <tr>
+
+                <th>
+                    ID
+                </th>
+
+                <th>
+                    Name
+                </th>
+
+                <th>
+                    Age
+                </th>
+
+                <th>
+                    City
+                </th>
+
+                <th>
+                    Course
+                </th>
+
+            </tr>
+
+
+            {% for record in records %}
+
+
+            <tr>
+
+                <td>
+                    {{ record[0] }}
+                </td>
+
+                <td>
+                    {{ record[1] }}
+                </td>
+
+                <td>
+                    {{ record[2] }}
+                </td>
+
+                <td>
+                    {{ record[3] }}
+                </td>
+
+                <td>
+                    {{ record[4] }}
+                </td>
+
+            </tr>
+
+
+            {% endfor %}
+
+
+        </table>
+
+
+    </div>
+
+
+    {% else %}
+
+
+        <div class="empty">
+
+            No unique records stored yet.
+
+        </div>
+
+
+    {% endif %}
+
+
+    <!-- =========================================
+         BACK LINK
+    ========================================== -->
+
+    <a
+        href="/"
+        class="back"
+    >
+
+        ← Back to Data Entry
+
+    </a>
+
+
+</div>
+
+
+</body>
+
+</html>

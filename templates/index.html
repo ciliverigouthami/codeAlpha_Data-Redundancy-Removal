@@ -1,82 +1,682 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Data Redundancy Removal System</title>
 
+
     <style>
+
+        /* ==============================
+           PAGE
+        ============================== */
+
         body {
+
             font-family: Arial, sans-serif;
-            background-color: #f4f6f8;
+
+            background-color: #f2f5f9;
+
             margin: 0;
+
             padding: 0;
+
         }
+
+
+        /* ==============================
+           MAIN CONTAINER
+        ============================== */
 
         .container {
-            width: 60%;
-            margin: 80px auto;
+
+            width: 600px;
+
+            max-width: 90%;
+
+            margin: 40px auto;
+
             background-color: white;
-            padding: 40px;
-            border-radius: 10px;
-            text-align: center;
+
+            padding: 30px;
+
+            border-radius: 12px;
+
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
         }
+
+
+        /* ==============================
+           HEADINGS
+        ============================== */
 
         h1 {
-            color: #2c3e50;
+
+            text-align: center;
+
+            color: #243b53;
+
+            margin-bottom: 10px;
+
         }
+
+
+        h2 {
+
+            color: #243b53;
+
+            margin-top: 30px;
+
+        }
+
 
         p {
-            color: #555;
-            font-size: 18px;
+
+            text-align: center;
+
+            color: #666;
+
         }
 
-        input[type="file"] {
-            margin: 25px 0;
-            padding: 10px;
+
+        /* ==============================
+           FORM LABELS
+        ============================== */
+
+        label {
+
+            display: block;
+
+            margin-top: 15px;
+
+            font-weight: bold;
+
+            color: #333;
+
         }
+
+
+        /* ==============================
+           INPUT FIELDS
+        ============================== */
+
+        input[type="text"],
+        input[type="number"],
+        input[type="file"] {
+
+            width: 100%;
+
+            padding: 11px;
+
+            margin-top: 6px;
+
+            box-sizing: border-box;
+
+            border: 1px solid #ccc;
+
+            border-radius: 6px;
+
+            font-size: 14px;
+
+        }
+
+
+        input:focus {
+
+            outline: none;
+
+            border-color: #2196f3;
+
+        }
+
+
+        /* ==============================
+           BUTTONS
+        ============================== */
 
         button {
-            background-color: #3498db;
-            color: white;
+
+            width: 100%;
+
+            padding: 12px;
+
+            margin-top: 25px;
+
             border: none;
-            padding: 12px 25px;
+
+            border-radius: 6px;
+
+            background-color: #2196f3;
+
+            color: white;
+
             font-size: 16px;
-            border-radius: 5px;
+
             cursor: pointer;
+
         }
 
+
         button:hover {
-            background-color: #2980b9;
+
+            background-color: #1976d2;
+
         }
+
+
+        .upload-button {
+
+            background-color: #28a745;
+
+        }
+
+
+        .upload-button:hover {
+
+            background-color: #218838;
+
+        }
+
+
+        /* ==============================
+           SECTION SEPARATOR
+        ============================== */
+
+        .section {
+
+            border-top: 1px solid #ddd;
+
+            margin-top: 35px;
+
+            padding-top: 10px;
+
+        }
+
+
+        /* ==============================
+           RESULT MESSAGE
+        ============================== */
+
+        .message {
+
+            margin-top: 25px;
+
+            padding: 18px;
+
+            text-align: center;
+
+            border-radius: 8px;
+
+            font-weight: bold;
+
+            line-height: 1.7;
+
+        }
+
+
+        /* ==============================
+           UNIQUE
+        ============================== */
+
+        .unique {
+
+            background-color: #d4edda;
+
+            color: #155724;
+
+            border: 1px solid #c3e6cb;
+
+        }
+
+
+        /* ==============================
+           REDUNDANT
+        ============================== */
+
+        .redundant {
+
+            background-color: #f8d7da;
+
+            color: #721c24;
+
+            border: 1px solid #f5c6cb;
+
+        }
+
+
+        /* ==============================
+           FALSE POSITIVE
+        ============================== */
+
+        .false-positive {
+
+            background-color: #fff3cd;
+
+            color: #856404;
+
+            border: 1px solid #ffeeba;
+
+        }
+
+
+        /* ==============================
+           GENERAL SUCCESS
+        ============================== */
+
+        .success {
+
+            background-color: #d4edda;
+
+            color: #155724;
+
+            border: 1px solid #c3e6cb;
+
+        }
+
+
+        /* ==============================
+           ERROR
+        ============================== */
+
+        .error {
+
+            background-color: #f8d7da;
+
+            color: #721c24;
+
+            border: 1px solid #f5c6cb;
+
+        }
+
+
+        /* ==============================
+           CSV RESULT
+        ============================== */
+
+        .csv-result {
+
+            margin-top: 25px;
+
+            padding: 20px;
+
+            background-color: #eef5ff;
+
+            border-radius: 8px;
+
+            border: 1px solid #c8ddff;
+
+        }
+
+
+        .csv-result h3 {
+
+            text-align: center;
+
+            color: #243b53;
+
+            margin-top: 0;
+
+        }
+
+
+        .result-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            padding: 10px;
+
+            margin-top: 8px;
+
+            border-radius: 5px;
+
+            font-weight: bold;
+
+        }
+
+
+        .unique-row {
+
+            background-color: #d4edda;
+
+            color: #155724;
+
+        }
+
+
+        .redundant-row {
+
+            background-color: #f8d7da;
+
+            color: #721c24;
+
+        }
+
+
+        .false-row {
+
+            background-color: #fff3cd;
+
+            color: #856404;
+
+        }
+
+
+        /* ==============================
+           DASHBOARD LINK
+        ============================== */
+
+        .dashboard {
+
+            display: block;
+
+            text-align: center;
+
+            margin-top: 30px;
+
+            color: #2196f3;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+        }
+
+
+        .dashboard:hover {
+
+            text-decoration: underline;
+
+        }
+
+
+        /* ==============================
+           CSV FORMAT NOTE
+        ============================== */
+
+        .csv-note {
+
+            background-color: #f8f9fa;
+
+            border-left: 4px solid #2196f3;
+
+            padding: 12px;
+
+            margin-top: 15px;
+
+            font-size: 13px;
+
+            color: #555;
+
+        }
+
+
+        .csv-note strong {
+
+            color: #243b53;
+
+        }
+
     </style>
+
 </head>
+
 
 <body>
 
+
     <div class="container">
 
-        <h1>Data Redundancy Removal System</h1>
+
+        <!-- =========================================
+             TITLE
+        ========================================== -->
+
+        <h1>
+            Data Redundancy Removal System
+        </h1>
+
 
         <p>
-            Upload your CSV file to detect and remove duplicate records.
+            Detect, classify and prevent duplicate data.
         </p>
 
-        <form action="/upload" method="POST" enctype="multipart/form-data">
 
-            <input type="file" name="file" accept=".csv" required>
+        <!-- =========================================
+             MANUAL DATA ENTRY
+        ========================================== -->
 
-            <br>
+        <h2>
+            Add Individual Record
+        </h2>
+
+
+        <form
+            action="/add"
+            method="POST"
+        >
+
+
+            <!-- NAME -->
+
+            <label>
+                Name
+            </label>
+
+            <input
+                type="text"
+                name="name"
+                placeholder="Enter name"
+                required
+            >
+
+
+            <!-- AGE -->
+
+            <label>
+                Age
+            </label>
+
+            <input
+                type="number"
+                name="age"
+                placeholder="Enter age"
+                min="1"
+                required
+            >
+
+
+            <!-- CITY -->
+
+            <label>
+                City
+            </label>
+
+            <input
+                type="text"
+                name="city"
+                placeholder="Enter city"
+                required
+            >
+
+
+            <!-- COURSE -->
+
+            <label>
+                Course
+            </label>
+
+            <input
+                type="text"
+                name="course"
+                placeholder="Enter course"
+                required
+            >
+
+
+            <!-- SUBMIT -->
 
             <button type="submit">
-                Remove Duplicates
+
+                Check & Add Data
+
             </button>
+
 
         </form>
 
+
+        <!-- =========================================
+             CSV UPLOAD SECTION
+        ========================================== -->
+
+        <div class="section">
+
+
+            <h2>
+                Upload CSV File
+            </h2>
+
+
+            <p>
+                Upload a CSV file to automatically
+                detect and classify redundant data.
+            </p>
+
+
+            <!-- CSV FORMAT -->
+
+            <div class="csv-note">
+
+                <strong>
+                    Required CSV columns:
+                </strong>
+
+                name, age, city, course
+
+            </div>
+
+
+            <form
+                action="/upload"
+                method="POST"
+                enctype="multipart/form-data"
+            >
+
+
+                <input
+                    type="file"
+                    name="file"
+                    accept=".csv"
+                    required
+                >
+
+
+                <button
+                    type="submit"
+                    class="upload-button"
+                >
+
+                    Upload & Check CSV
+
+                </button>
+
+
+            </form>
+
+
+        </div>
+
+
+        <!-- =========================================
+             RESULT MESSAGE
+        ========================================== -->
+
+        {% if message %}
+
+
+            {% if classification == "UNIQUE" %}
+
+
+                <div class="message unique">
+
+                    🟢 UNIQUE DATA
+
+                    <br>
+
+                    {{ message }}
+
+                </div>
+
+
+            {% elif classification == "REDUNDANT" %}
+
+
+                <div class="message redundant">
+
+                    🔴 REDUNDANT DATA
+
+                    <br>
+
+                    {{ message }}
+
+                </div>
+
+
+            {% elif classification == "FALSE_POSITIVE" %}
+
+
+                <div class="message false-positive">
+
+                    🟡 POSSIBLE FALSE POSITIVE
+
+                    <br>
+
+                    {{ message }}
+
+                </div>
+
+
+            {% else %}
+
+
+                <div class="message success">
+
+                    {{ message }}
+
+                </div>
+
+
+            {% endif %}
+
+
+        {% endif %}
+
+
+        <!-- =========================================
+             DASHBOARD LINK
+        ========================================== -->
+
+        <a
+            href="/dashboard"
+            class="dashboard"
+        >
+
+            📊 View Database Dashboard
+
+        </a>
+
+
     </div>
 
+
 </body>
+
 </html>

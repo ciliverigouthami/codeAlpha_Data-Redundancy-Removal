@@ -1,4 +1,10 @@
 __pycache__/
 *.pyc
-output/
-.env
+
+database.db
+
+.venv/
+venv/
+env/
+
+.DS_Store
