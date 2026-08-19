@@ -77,15 +77,51 @@ python app.py
 5. Open the Application
 http://127.0.0.1:5000
 
+## How the System Works
 
-You **do not type these commands into your README and then execute them**.
+1. User enters data manually or uploads a CSV file.
+2. The system checks the new record against existing records.
+3. Each record is classified as:
+   - Unique
+   - Redundant
+   - Possible False Positive
+4. Unique records are stored in the database.
+5. Duplicate records are identified as redundant.
+6. The dashboard displays classification statistics and history.
+7. Users can download the cleaned CSV file.
 
----
+## Project Output
 
-### 2. Terminal — where commands are actually executed
+The dashboard displays:
 
-For example, when we eventually want to download your GitHub project onto another computer, we would open **PowerShell/Terminal** and run:
+- Total records checked
+- Number of unique records
+- Number of redundant records
+- Number of possible false positives
+- Classification history
+- Stored unique records
+- Cleaned CSV output
 
-```powershell
-git clone https://github.com/ciliverigouthami/DataRedundancyRemoval.git
+## Testing
 
+The system was tested using sample CSV files containing:
+
+- Unique records
+- Duplicate records
+- Similar records with minor differences
+
+The application successfully classified the records into Unique, Redundant, and Possible False Positive categories.
+
+## Internship Task
+
+This project was developed as part of the CodeAlpha Cloud Computing Internship.
+
+### Task 1: Data Redundancy Removal System
+
+The objective of this task is to identify and classify data as unique, redundant, or possible false positive and prevent duplicate data from being added to the database.
+
+## Author
+
+**Ciliveri Gouthami**
+
+B.Tech – Artificial Intelligence and Machine Learning
